@@ -106,7 +106,35 @@ class View(tk.Tk):
             row=3,
             column=0
         )
+        # self.account_table.bind("<Double-1>", lambda event: self._open_account_window())
 
+    def open_account_window(self):
+        return self._open_account_window()
+
+    def _open_account_window(self):
+        # TODO: rename new_window and make sure that it is there only once
+        self.new_window = tk.Toplevel(self._main_frame)
+        # self.new_window.geometry("400x400")
+
+        selected_account_data = self.account_table.item(self.account_table.selection()[0])
+        account_name = selected_account_data['values'][0]
+        self.new_window.title(account_name)
+
+        self.history_table = self._make_history_table(
+            parent_frame=self.new_window,
+            row=4,
+            column=0,
+        )
+
+        self.add_transaction_button = self._make_button(
+            parent_frame=self.new_window,
+            text="add transaction",
+            command=None,
+            row=0,
+            column=0,
+        )
+
+        return account_name
 
     def _make_status_bar(self):
         self._status_bar = tk.Label(self, text="Ready", bd=1, relief=tk.SUNKEN, anchor=tk.W)
@@ -176,6 +204,15 @@ class View(tk.Tk):
         tr = ttk.Treeview(parent_frame, columns=("Name", "Currency", "Balance"))
         tr.heading("Name", text="Name")
         tr.heading("Currency", text="Currency")
+        tr.heading("Balance", text="Balance")
+        tr.grid(row=row, column=column)
+        return tr
+
+    def _make_history_table(self, parent_frame, row, column):
+        tr = ttk.Treeview(parent_frame, columns=("Date", "Description", "Amount", "Balance"))
+        tr.heading("Date", text="Date")
+        tr.heading("Description", text="Description")
+        tr.heading("Amount", text="Amount")
         tr.heading("Balance", text="Balance")
         tr.grid(row=row, column=column)
         return tr

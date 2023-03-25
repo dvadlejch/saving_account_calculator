@@ -19,6 +19,8 @@ class Controller:
         self.view.add_account_button.config(command=self.add_account)
         self.view.remove_account_button.config(command=self.remove_account)
 
+        self.view.account_table.bind("<Double-1>", lambda event: self.open_account_window())
+
     def main(self):
         """
         Runs the main function of the View class to start the Account manager application.
@@ -121,6 +123,25 @@ class Controller:
 
         except Exception as e:
             print(f"Failed to remove account: {e}")
+
+    def get_account(self, name):
+
+        accounts = self.model.get_all_accounts()
+        if name in accounts:
+            return accounts[name]
+        return None
+
+    def open_account_window(self):
+        account_name = self.view.open_account_window()
+
+        transactions = self.model.get_account_transactions(account_name)
+
+        for transaction in transactions:
+            self.view.history_table.insert("", "end", text=str(len(self.view.history_table.get_children()) + 1),
+                                           values=(transaction['date'],
+                                                   transaction['description'],
+                                                   transaction['amount'],
+                                                   transaction['balance'],))
 
 
 if __name__ == '__main__':
