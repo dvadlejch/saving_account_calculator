@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import datetime as dt
 
 
 class CurrencyConverter:
@@ -24,12 +25,14 @@ class CurrencyConverter:
         return amount * rate
 
 
-@dataclass
 class Account:
-    name: str
-    currency: str
-    balance: float = 0.0
-    converter: CurrencyConverter = CurrencyConverter()
+
+    def __init__(self, name, currency, balance=0.0, converter=CurrencyConverter()):
+        self.name = name
+        self.currency = currency
+        self.transactions = []  #
+        self.balance = balance
+        self.converter = converter
 
     def deposit(self, amount):
         self.balance += amount
@@ -53,3 +56,18 @@ class Account:
 
     def update_balance(self, balance):
         self.balance = balance
+
+    def add_transaction(self, date, description, amount):
+
+        new_balance = self.balance + amount
+
+        # create new transaction dictionary and add it to the list of transactions
+        transaction = {'date': date, 'description': description, 'amount': amount, 'balance': new_balance}
+        self.transactions.append(transaction)
+
+        # update balance
+        self.balance = new_balance
+
+    def get_transactions(self):
+        return self.transactions
+

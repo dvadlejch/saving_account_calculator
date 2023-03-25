@@ -79,7 +79,6 @@ class Controller:
         self.view.account_table.insert("", "end", text=str(len(self.view.account_table.get_children()) + 1),
                                        values=(account_name, account_currency, balance))
 
-
     def update_account_balance(self, name, balance):
         """
         Updates the balance of the Account with the given name in the Model.

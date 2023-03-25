@@ -33,4 +33,13 @@ class Model:
     def get_all_accounts(self):
         return self.accounts
 
+    def add_transaction(self, account_name, date, description, amount):
+        if account_name in self.accounts:
+            self.accounts[account_name].add_transaction(date, description, amount)
+
+    def get_account_transactions(self, account_name):
+        if account_name in self.accounts:
+            return self.accounts[account_name].get_transactions()
+        return None
+
 

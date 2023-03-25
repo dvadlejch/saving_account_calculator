@@ -37,3 +37,7 @@ def test_account():
 
     assert pytest.approx(account.get_balance(), abs=0.01) == 0
     assert pytest.approx(account.get_balance_in_eur(), abs=0.01) == 0
+
+    account.add_transaction(date="01.02.2023", description="test", amount=500)
+    assert account.get_balance() == 500
+
