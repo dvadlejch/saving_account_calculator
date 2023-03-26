@@ -134,14 +134,48 @@ class Controller:
     def open_account_window(self):
         account_name = self.view.open_account_window()
 
-        transactions = self.model.get_account_transactions(account_name)
+        self.view.add_transaction_button.config(command=self.add_transaction)
 
+        self._update_transactions_table(account_name=account_name)
+
+    def _update_transactions_table(self, account_name):
+
+        self.view.history_table.delete(*self.view.history_table.get_children())
+
+        transactions = self.model.get_account_transactions(account_name)
         for transaction in transactions:
             self.view.history_table.insert("", "end", text=str(len(self.view.history_table.get_children()) + 1),
                                            values=(transaction['date'],
                                                    transaction['description'],
                                                    transaction['amount'],
                                                    transaction['balance'],))
+
+    def add_transaction(self):
+
+        account_name = list(self.model.get_all_accounts().keys())[0]
+        self.model.add_transaction(
+            account_name=account_name,
+            date="1.1.2000",
+            description="test",
+            amount=200,
+        )
+
+        self._update_transactions_table(account_name=account_name)
+
+        # update account table
+        # TODO: do it properly
+        # TODO: at the current state, it works only if just one account is in the account table
+        account_table_itm = self.view.account_table.get_children()
+        for acc_table_id in account_table_itm:
+            acc_values = self.view.account_table.item(acc_table_id)['values']
+            if acc_values[0] == account_name:
+                values_new = acc_values.copy()
+                values_new[2] = self.model.get_account_balance(name=account_name)
+                self.view.account_table.item(
+                    acc_table_id,
+                    values=values_new,
+                )
+
 
 
 if __name__ == '__main__':
