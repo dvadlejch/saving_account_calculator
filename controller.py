@@ -134,7 +134,10 @@ class Controller:
     def open_account_window(self):
         account_name = self.view.open_account_window()
 
-        self.view.add_transaction_button.config(command=self.add_transaction)
+        def add_trans():
+            return self.add_transaction(account_name)
+
+        self.view.add_transaction_button.config(command=add_trans)
 
         self._update_transactions_table(account_name=account_name)
 
@@ -150,21 +153,7 @@ class Controller:
                                                    transaction['amount'],
                                                    transaction['balance'],))
 
-    def add_transaction(self):
-
-        account_name = list(self.model.get_all_accounts().keys())[0]
-        self.model.add_transaction(
-            account_name=account_name,
-            date="1.1.2000",
-            description="test",
-            amount=200,
-        )
-
-        self._update_transactions_table(account_name=account_name)
-
-        # update account table
-        # TODO: do it properly
-        # TODO: at the current state, it works only if just one account is in the account table
+    def _update_account_table(self, account_name):
         account_table_itm = self.view.account_table.get_children()
         for acc_table_id in account_table_itm:
             acc_values = self.view.account_table.item(acc_table_id)['values']
@@ -175,6 +164,19 @@ class Controller:
                     acc_table_id,
                     values=values_new,
                 )
+
+    def add_transaction(self, account_name):
+
+        self.model.add_transaction(
+            account_name=account_name,
+            date="1.1.2000",
+            description="test",
+            amount=200,
+        )
+
+        self._update_transactions_table(account_name=account_name)
+
+        self._update_account_table(account_name=account_name)
 
 
 
