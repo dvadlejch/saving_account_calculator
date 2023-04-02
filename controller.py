@@ -2,6 +2,7 @@ from view import View
 from model import Model
 from account import Account
 import tkinter as tk
+from datetime import date
 
 
 class Controller:
@@ -146,14 +147,16 @@ class Controller:
         self.view.history_tables[account_name].delete(*self.view.history_tables[account_name].get_children())
 
         transactions = self.model.get_account_transactions(account_name)
-        for transaction in transactions:
+        for transaction_id, transaction in transactions.items():
             self.view.history_tables[account_name].insert(
                 "", "end", text=str(len(self.view.history_tables[account_name].get_children()) + 1),
-                values=(transaction['date'],
-                        transaction['description'],
-                        transaction['amount'],
-                        transaction['balance'],
-                        )
+                values=(
+                    transaction_id,
+                    transaction['date'],
+                    transaction['description'],
+                    transaction['amount'],
+                    transaction['balance'],
+                )
             )
 
     def _update_account_table(self, account_name):
@@ -172,7 +175,7 @@ class Controller:
 
         self.model.add_transaction(
             account_name=account_name,
-            date="1.1.2000",
+            date=date(2000, 10, 15),
             description="test",
             amount=200,
         )
@@ -180,6 +183,11 @@ class Controller:
         self._update_transactions_table(account_name=account_name)
 
         self._update_account_table(account_name=account_name)
+
+    def remove_transaction(self, account_name, transaction_id):
+        self.model.remove_transaction(account_name=account_name, trans_id=transaction_id)
+        self._update_transactions_table(account_name)
+        self._update_account_table(account_name)
 
 
 

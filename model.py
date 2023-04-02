@@ -37,6 +37,10 @@ class Model:
         if account_name in self.accounts:
             self.accounts[account_name].add_transaction(date, description, amount)
 
+    def remove_transaction(self, account_name, trans_id):
+        if account_name in self.accounts:
+            self.accounts[account_name].remove_transaction(trans_id)
+
     def get_account_transactions(self, account_name):
         if account_name in self.accounts:
             return self.accounts[account_name].get_transactions()

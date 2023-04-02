@@ -55,6 +55,12 @@ class View(tk.Tk):
         menu_bar.add_cascade(label="File", menu=file_menu)
         self.config(menu=menu_bar)
 
+    def show_context_menu(self, event):
+        """
+        Displays the right-click context menu at the cursor location.
+        """
+        self.context_menu.tk_popup(event.x_root, event.y_root)
+
     def _make_main_frame(self):
         self._main_frame = ttk.Frame(self)
         self._main_frame.pack(padx=self.PAD, pady=self.PAD)
@@ -124,15 +130,18 @@ class View(tk.Tk):
             self._open_windows[account_name] = tk.Toplevel(self._main_frame)
             self._open_windows[account_name].title(account_name)
 
-            def close_window():
-                self.close_account_window(account_name=account_name)
-            self._open_windows[account_name].protocol("WM_DELETE_WINDOW", close_window)
+            # properly close the window when it's closed by the user
+            self._open_windows[account_name].protocol("WM_DELETE_WINDOW",
+                                                      lambda: self.close_account_window(account_name=account_name))
 
             self.history_tables[account_name] = self._make_history_table(
                 parent_frame=self._open_windows[account_name],
                 row=4,
                 column=0,
             )
+
+            # Bind the right-click event to the account history table
+            self.history_tables[account_name].bind("<Button-3>", self.show_context_menu)
 
             self.add_transaction_button = self._make_button(
                 parent_frame=self._open_windows[account_name],
@@ -144,6 +153,15 @@ class View(tk.Tk):
         else:
             self._open_windows[account_name].lift()
 
+        # Create the right-click context menu
+        self.context_menu = tk.Menu(self.account_table, tearoff=0)
+        self.context_menu.add_separator()
+
+        self.context_menu.add_command(
+            label="remove transaction",
+            command=lambda: self._remove_transaction_from_history_table(account_name=account_name),
+        )
+
         return account_name
 
     def close_account_window(self, account_name):
@@ -152,6 +170,15 @@ class View(tk.Tk):
     def _close_account_window(self, account_name):
         self._open_windows[account_name].destroy()
         del self._open_windows[account_name]
+
+    def _remove_transaction_from_history_table(self, account_name):
+        # TODO: IndexError: tuple index out of range fix this
+        selected_transaction_data = self.history_tables[account_name].item(
+            self.history_tables[account_name].selection()[0]
+        )
+
+        trans_id = selected_transaction_data['values'][0]
+        self.controller.remove_transaction(account_name=account_name, transaction_id=trans_id)
 
     def _make_status_bar(self):
         self._status_bar = tk.Label(self, text="Ready", bd=1, relief=tk.SUNKEN, anchor=tk.W)
@@ -226,7 +253,8 @@ class View(tk.Tk):
         return tr
 
     def _make_history_table(self, parent_frame, row, column):
-        tr = ttk.Treeview(parent_frame, columns=("Date", "Description", "Amount", "Balance"))
+        tr = ttk.Treeview(parent_frame, columns=("ID", "Date", "Description", "Amount", "Balance"))
+        tr.heading("ID", text="transaction ID")
         tr.heading("Date", text="Date")
         tr.heading("Description", text="Description")
         tr.heading("Amount", text="Amount")
@@ -246,9 +274,8 @@ class View(tk.Tk):
     def show_message(self, message):
         messagebox.showinfo("Message", message)
 
-
     def show_error(self, error):
         messagebox.showerror("Error", error)
 
     def _dummy_func(self):
-        pass
+        print("I am a dummy function!")
