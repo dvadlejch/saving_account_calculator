@@ -143,15 +143,18 @@ class Controller:
 
     def _update_transactions_table(self, account_name):
 
-        self.view.history_table.delete(*self.view.history_table.get_children())
+        self.view.history_tables[account_name].delete(*self.view.history_tables[account_name].get_children())
 
         transactions = self.model.get_account_transactions(account_name)
         for transaction in transactions:
-            self.view.history_table.insert("", "end", text=str(len(self.view.history_table.get_children()) + 1),
-                                           values=(transaction['date'],
-                                                   transaction['description'],
-                                                   transaction['amount'],
-                                                   transaction['balance'],))
+            self.view.history_tables[account_name].insert(
+                "", "end", text=str(len(self.view.history_tables[account_name].get_children()) + 1),
+                values=(transaction['date'],
+                        transaction['description'],
+                        transaction['amount'],
+                        transaction['balance'],
+                        )
+            )
 
     def _update_account_table(self, account_name):
         account_table_itm = self.view.account_table.get_children()

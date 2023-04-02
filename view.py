@@ -42,6 +42,9 @@ class View(tk.Tk):
         self._make_main_frame()
         self._make_status_bar()  # add a status bar
 
+        self._open_windows = {}
+        self.history_tables = {}
+
     def main(self):
         self.mainloop()
 
@@ -112,29 +115,43 @@ class View(tk.Tk):
         return self._open_account_window()
 
     def _open_account_window(self):
-        # TODO: rename new_window and make sure that it is there only once
-        self.new_window = tk.Toplevel(self._main_frame)
         # self.new_window.geometry("400x400")
 
         selected_account_data = self.account_table.item(self.account_table.selection()[0])
         account_name = selected_account_data['values'][0]
-        self.new_window.title(account_name)
 
-        self.history_table = self._make_history_table(
-            parent_frame=self.new_window,
-            row=4,
-            column=0,
-        )
+        if account_name not in self._open_windows.keys():
+            self._open_windows[account_name] = tk.Toplevel(self._main_frame)
+            self._open_windows[account_name].title(account_name)
 
-        self.add_transaction_button = self._make_button(
-            parent_frame=self.new_window,
-            text="add transaction",
-            command=None,
-            row=0,
-            column=0,
-        )
+            def close_window():
+                self.close_account_window(account_name=account_name)
+            self._open_windows[account_name].protocol("WM_DELETE_WINDOW", close_window)
+
+            self.history_tables[account_name] = self._make_history_table(
+                parent_frame=self._open_windows[account_name],
+                row=4,
+                column=0,
+            )
+
+            self.add_transaction_button = self._make_button(
+                parent_frame=self._open_windows[account_name],
+                text="add transaction",
+                command=None,
+                row=0,
+                column=0,
+            )
+        else:
+            self._open_windows[account_name].lift()
 
         return account_name
+
+    def close_account_window(self, account_name):
+        return self._close_account_window(account_name)
+
+    def _close_account_window(self, account_name):
+        self._open_windows[account_name].destroy()
+        del self._open_windows[account_name]
 
     def _make_status_bar(self):
         self._status_bar = tk.Label(self, text="Ready", bd=1, relief=tk.SUNKEN, anchor=tk.W)
