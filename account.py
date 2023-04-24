@@ -11,7 +11,7 @@ class CurrencyConverter:
         Functions:
             pass()
             __init__(self): initializes the class.
-
+        
     """
     def __init__(self):
         self.reference_currency = "EUR"
