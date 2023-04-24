@@ -3,6 +3,15 @@ import datetime as dt
 
 
 class CurrencyConverter:
+    """
+        Parameters:
+            reference_currency: The base currency, that every other currency will be converted into.
+            exchange_rates    : yes
+            
+        Functions:
+            pass():
+        
+    """
     def __init__(self):
         self.reference_currency = "EUR"
         self.exchange_rates = {"EUR": 1.0}
