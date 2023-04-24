@@ -9,7 +9,8 @@ class CurrencyConverter:
             exchange_rates    : yes
             
         Functions:
-            pass():
+            pass()
+            __init__(self): initializes the class.
         
     """
     def __init__(self):
