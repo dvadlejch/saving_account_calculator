@@ -4,15 +4,16 @@ import datetime as dt
 
 class CurrencyConverter:
     """
-        Parameters:
-            reference_currency: The base currency, that every other currency will be converted into.
-            exchange_rates    : yes
-            
-        Functions:
-            pass()
-            __init__(self): initializes the class.
-        
+    Parameters:
+        reference_currency: The base currency, that every other currency will be converted into.
+        exchange_rates    : yes
+
+    Functions:
+        pass()
+        __init__(self): initializes the class.
+
     """
+
     def __init__(self):
         self.reference_currency = "EUR"
         self.exchange_rates = {"EUR": 1.0}
@@ -36,7 +37,6 @@ class CurrencyConverter:
 
 
 class Account:
-
     def __init__(self, name, currency, balance=0.0, converter=CurrencyConverter()):
         self.name = name
         self.currency = currency
@@ -69,8 +69,9 @@ class Account:
 
     def _sort_transactions(self):
         if self.transactions:
-
-            sorted_transaction_ids = sorted(self.transactions, key=lambda x: self.transactions[x]['date'])
+            sorted_transaction_ids = sorted(
+                self.transactions, key=lambda x: self.transactions[x]["date"]
+            )
 
             transactions_sorted = {}
             transactions = self.transactions.copy()
@@ -80,7 +81,6 @@ class Account:
             self.transactions = transactions_sorted
 
     def _update_transaction_balances(self):
-
         self._sort_transactions()
         current_balance = self.balance
 
@@ -88,18 +88,21 @@ class Account:
 
         updated_balance = current_balance
         for idx, transaction_id in enumerate(transaction_ids_reversed):
-
-            self.transactions[transaction_id]['balance'] = updated_balance
-            updated_balance -= self.transactions[transaction_ids_reversed[idx - 1]]['amount']
-
-
+            self.transactions[transaction_id]["balance"] = updated_balance
+            updated_balance -= self.transactions[transaction_ids_reversed[idx - 1]][
+                "amount"
+            ]
 
     def add_transaction(self, date, description, amount):
-
         new_balance = self.balance + amount
 
         # create new transaction dictionary and add it to the list of transactions
-        transaction = {'date': date, 'description': description, 'amount': amount, 'balance': new_balance}
+        transaction = {
+            "date": date,
+            "description": description,
+            "amount": amount,
+            "balance": new_balance,
+        }
         try:
             trans_id = max(self.transactions.keys()) + 1
         except ValueError:
@@ -110,9 +113,8 @@ class Account:
         self.update_balance(new_balance)
 
     def remove_transaction(self, trans_id):
-
         # update balance
-        new_balance = self.balance - self.transactions[trans_id]['amount']
+        new_balance = self.balance - self.transactions[trans_id]["amount"]
         self.update_balance(new_balance)
 
         # TODO: I have to somehow update balances properly in the history
@@ -122,4 +124,3 @@ class Account:
 
     def get_transactions(self):
         return self.transactions
-

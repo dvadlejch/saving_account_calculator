@@ -6,7 +6,6 @@ from datetime import date
 
 
 class Controller:
-
     def __init__(self):
         """
         Initializes the Controller class by creating an instance of the View and Model classes.
@@ -20,7 +19,9 @@ class Controller:
         self.view.add_account_button.config(command=self.add_account)
         self.view.remove_account_button.config(command=self.remove_account)
 
-        self.view.account_table.bind("<Double-1>", lambda event: self.open_account_window())
+        self.view.account_table.bind(
+            "<Double-1>", lambda event: self.open_account_window()
+        )
 
     def main(self):
         """
@@ -79,8 +80,12 @@ class Controller:
         self.view.balance_entry.delete(0, tk.END)
 
         # update the table with the new account
-        self.view.account_table.insert("", "end", text=str(len(self.view.account_table.get_children()) + 1),
-                                       values=(account_name, account_currency, balance))
+        self.view.account_table.insert(
+            "",
+            "end",
+            text=str(len(self.view.account_table.get_children()) + 1),
+            values=(account_name, account_currency, balance),
+        )
 
     def update_account_balance(self, name, balance):
         """
@@ -112,7 +117,7 @@ class Controller:
                 return
 
             # get the name of the selected account
-            name = self.view.account_table.item(selection)['values'][0]
+            name = self.view.account_table.item(selection)["values"][0]
 
             # remove the account from the model and the table
             self._remove_account_from_model(name)
@@ -126,7 +131,6 @@ class Controller:
             print(f"Failed to remove account: {e}")
 
     def get_account(self, name):
-
         accounts = self.model.get_all_accounts()
         if name in accounts:
             return accounts[name]
@@ -143,26 +147,31 @@ class Controller:
         self._update_transactions_table(account_name=account_name)
 
     def _update_transactions_table(self, account_name):
-
-        self.view.history_tables[account_name].delete(*self.view.history_tables[account_name].get_children())
+        self.view.history_tables[account_name].delete(
+            *self.view.history_tables[account_name].get_children()
+        )
 
         transactions = self.model.get_account_transactions(account_name)
         for transaction_id, transaction in transactions.items():
             self.view.history_tables[account_name].insert(
-                "", "end", text=str(len(self.view.history_tables[account_name].get_children()) + 1),
+                "",
+                "end",
+                text=str(
+                    len(self.view.history_tables[account_name].get_children()) + 1
+                ),
                 values=(
                     transaction_id,
-                    transaction['date'],
-                    transaction['description'],
-                    transaction['amount'],
-                    transaction['balance'],
-                )
+                    transaction["date"],
+                    transaction["description"],
+                    transaction["amount"],
+                    transaction["balance"],
+                ),
             )
 
     def _update_account_table(self, account_name):
         account_table_itm = self.view.account_table.get_children()
         for acc_table_id in account_table_itm:
-            acc_values = self.view.account_table.item(acc_table_id)['values']
+            acc_values = self.view.account_table.item(acc_table_id)["values"]
             if acc_values[0] == account_name:
                 values_new = acc_values.copy()
                 values_new[2] = self.model.get_account_balance(name=account_name)
@@ -172,7 +181,6 @@ class Controller:
                 )
 
     def add_transaction(self, account_name):
-
         self.model.add_transaction(
             account_name=account_name,
             date=date(2000, 10, 15),
@@ -185,12 +193,13 @@ class Controller:
         self._update_account_table(account_name=account_name)
 
     def remove_transaction(self, account_name, transaction_id):
-        self.model.remove_transaction(account_name=account_name, trans_id=transaction_id)
+        self.model.remove_transaction(
+            account_name=account_name, trans_id=transaction_id
+        )
         self._update_transactions_table(account_name)
         self._update_account_table(account_name)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app_manager = Controller()
     app_manager.main()
