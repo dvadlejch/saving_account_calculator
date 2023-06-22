@@ -7,7 +7,7 @@ class CurrencyConverter:
         Parameters:
             reference_currency: The base currency, that every other currency will be converted into.
             exchange_rates    : yes
-            
+
         Functions:
             pass()
             __init__(self): initializes the class.
