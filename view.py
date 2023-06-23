@@ -111,9 +111,7 @@ class View(tk.Tk):
 
         # create an accounts table
         self.account_table = self._make_account_table(
-            parent_frame=self._main_frame,
-            row=3,
-            column=0
+            parent_frame=self._main_frame, row=3, column=0
         )
         # self.account_table.bind("<Double-1>", lambda event: self._open_account_window())
 
@@ -123,16 +121,20 @@ class View(tk.Tk):
     def _open_account_window(self):
         # self.new_window.geometry("400x400")
 
-        selected_account_data = self.account_table.item(self.account_table.selection()[0])
-        account_name = selected_account_data['values'][0]
+        selected_account_data = self.account_table.item(
+            self.account_table.selection()[0]
+        )
+        account_name = selected_account_data["values"][0]
 
         if account_name not in self._open_windows.keys():
             self._open_windows[account_name] = tk.Toplevel(self._main_frame)
             self._open_windows[account_name].title(account_name)
 
             # properly close the window when it's closed by the user
-            self._open_windows[account_name].protocol("WM_DELETE_WINDOW",
-                                                      lambda: self.close_account_window(account_name=account_name))
+            self._open_windows[account_name].protocol(
+                "WM_DELETE_WINDOW",
+                lambda: self.close_account_window(account_name=account_name),
+            )
 
             self.history_tables[account_name] = self._make_history_table(
                 parent_frame=self._open_windows[account_name],
@@ -159,7 +161,9 @@ class View(tk.Tk):
 
         self.context_menu.add_command(
             label="remove transaction",
-            command=lambda: self._remove_transaction_from_history_table(account_name=account_name),
+            command=lambda: self._remove_transaction_from_history_table(
+                account_name=account_name
+            ),
         )
 
         return account_name
@@ -177,11 +181,15 @@ class View(tk.Tk):
             self.history_tables[account_name].selection()[0]
         )
 
-        trans_id = selected_transaction_data['values'][0]
-        self.controller.remove_transaction(account_name=account_name, transaction_id=trans_id)
+        trans_id = selected_transaction_data["values"][0]
+        self.controller.remove_transaction(
+            account_name=account_name, transaction_id=trans_id
+        )
 
     def _make_status_bar(self):
-        self._status_bar = tk.Label(self, text="Ready", bd=1, relief=tk.SUNKEN, anchor=tk.W)
+        self._status_bar = tk.Label(
+            self, text="Ready", bd=1, relief=tk.SUNKEN, anchor=tk.W
+        )
         self._status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
     def set_status_text(self, text):
@@ -253,7 +261,9 @@ class View(tk.Tk):
         return tr
 
     def _make_history_table(self, parent_frame, row, column):
-        tr = ttk.Treeview(parent_frame, columns=("ID", "Date", "Description", "Amount", "Balance"))
+        tr = ttk.Treeview(
+            parent_frame, columns=("ID", "Date", "Description", "Amount", "Balance")
+        )
         tr.heading("ID", text="transaction ID")
         tr.heading("Date", text="Date")
         tr.heading("Description", text="Description")
@@ -268,7 +278,7 @@ class View(tk.Tk):
         :return:
             None
         """
-        plt.plot([0, 1, 2, 3], [0, 1, 4, 9], '.')
+        plt.plot([0, 1, 2, 3], [0, 1, 4, 9], ".")
         plt.show()
 
     def show_message(self, message):

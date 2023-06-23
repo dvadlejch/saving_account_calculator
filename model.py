@@ -2,7 +2,6 @@ from account import Account
 
 
 class Model:
-
     def __init__(self):
         self.accounts = {}
 
@@ -45,5 +44,3 @@ class Model:
         if account_name in self.accounts:
             return self.accounts[account_name].get_transactions()
         return None
-
-

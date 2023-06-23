@@ -2,8 +2,10 @@ from account import CurrencyConverter, Account
 import pytest
 
 
-@pytest.mark.parametrize("currency,rate,converted_to_eur,converted_from_eur",
-                         [("CZK", 24.24272, 4.12, 2424.27), ("GBP", 0.88487, 113.01, 88.49)])
+@pytest.mark.parametrize(
+    "currency,rate,converted_to_eur,converted_from_eur",
+    [("CZK", 24.24272, 4.12, 2424.27), ("GBP", 0.88487, 113.01, 88.49)],
+)
 def test_currency_conversions(currency, rate, converted_to_eur, converted_from_eur):
     converter = CurrencyConverter()
 
@@ -14,8 +16,16 @@ def test_currency_conversions(currency, rate, converted_to_eur, converted_from_e
 
     assert converter.get_exchange_rate(currency) == rate
 
-    assert pytest.approx(converter.convert_to_eur(currency=currency, amount=100), abs=0.01) == converted_to_eur
-    assert pytest.approx(converter.convert_from_eur(currency=currency, amount=100), abs=0.01) == converted_from_eur
+    assert (
+        pytest.approx(converter.convert_to_eur(currency=currency, amount=100), abs=0.01)
+        == converted_to_eur
+    )
+    assert (
+        pytest.approx(
+            converter.convert_from_eur(currency=currency, amount=100), abs=0.01
+        )
+        == converted_from_eur
+    )
 
 
 def test_account():
@@ -40,4 +50,3 @@ def test_account():
 
     account.add_transaction(date="01.02.2023", description="test", amount=500)
     assert account.get_balance() == 500
-
