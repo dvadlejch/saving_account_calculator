@@ -27,7 +27,6 @@ def test_currency_conversions(currency, rate, converted_to_eur, converted_from_e
         == converted_from_eur
     )
 
-
 def test_account():
     RATE = 24.24272
 
