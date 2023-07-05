@@ -30,23 +30,21 @@ In all of the GUI windows, the following informations should be visible:
 - save file name (if available)
 - account name (if available)
   
-1. Select Save File window
+1. **Select Save File window**
 
-GUI lists found Saved Files in a drop-down menu.
-User can select one, open selected, create new or delete.
-
-	Buttons: open, create new, delete selected.
-	1. Open: if Saved File is selected, load selected save file, else error message: "No saved file selected!". If Saved File is loaded successfully navigate to "Main window" window, else error message "Saved File could not be loaded".
-	2. Create new: create new. Don't load any saved file. Pop-up save window (to select save location), if save is successful: navigate to (empty) "Main window" window, else error message: "Could not create new file!".
-	3. Delete selected: if Saved File is selected, delete selected saved file. Else error message: "No saved file selected!". User stays in this window.
+	GUI lists found Saved Files in a drop-down menu.  
+	User can select one, open selected, create new or delete.  
+	Buttons: open, create new, delete selected.  
+	*. Open: if Saved File is selected, load selected save file, else error message: "No saved file selected!". If Saved File is loaded successfully navigate to "Main window" window, else error message "Saved File could not be loaded".
+	*. Create new: create new. Don't load any saved file. Pop-up save window (to select save location), if save is successful: navigate to (empty) "Main window" window, else error message: "Could not create new file!".
+	*. Delete selected: if Saved File is selected, delete selected saved file. Else error message: "No saved file selected!". User stays in this window.
  
-2. Main window
+2. **Main window**
 
-	All the accounts are listed with values: account name, currency, balance.
-	User can create, select and delete Accounts.
-	User can navigate back to "Select Save File" window to load different user.
-
-	(Optional: the last 3-5 transactions could be listed with information: Account Name, Currency, Amount, Transaction Type.)
+	All the accounts are listed with values: account name, currency, balance.  
+	User can create, select and delete Accounts.  
+	User can navigate back to "Select Save File" window to load different user.  
+	(Optional: the last 3-5 transactions could be listed with information: Account Name, Currency, Amount, Transaction Type.)  
 	1. Select Account: if Account is selected, load selected account, else error message: "No accunt selected!". If Account is loaded successfully, navigate to "Account Overview" window, else error message "Account could not be opened".
 	2. Create Account: navigate to "Account Creation" window.
 	3. Delete Account: if Account is selected, delete selected Account (don't forget transactions). Else error message: "No account selected!". User stays in this window.
