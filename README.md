@@ -31,8 +31,8 @@ In all of the GUI windows, the following informations should be visible:
 - account name (if available)
   
 1. Select Save File window
-	GUI lists found Saved Files in a drop-down menu.
-	User can select one, open selected, create new or delete.
+GUI lists found Saved Files in a drop-down menu.
+User can select one, open selected, create new or delete.
 	Buttons: open, create new, delete selected.
 	1. Open: if Saved File is selected, load selected save file, else error message: "No saved file selected!". If Saved File is loaded successfully navigate to "Main window" window, else error message "Saved File could not be loaded".
 	2. Create new: create new. Don't load any saved file. Pop-up save window (to select save location), if save is successful: navigate to (empty) "Main window" window, else error message: "Could not create new file!".
